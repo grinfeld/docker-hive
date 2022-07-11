@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  hive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hive
+    expose:
+    - 9083
+    - 5432
+    ports:
+    - 9083:9083
+    - 5432:5432
