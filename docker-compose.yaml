@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  hive:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hive
+    expose:
+    - 9083
+    ports:
+    - 9083:9083
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    env_file:
+    - docker/.env
+    ports:
+    - "9000:9000"
+    - "9001:9001"
+    command: server /data --console-address ":9001"
+
+  minio-setup:
+    image: minio/mc
+    build:
+      context: .
+      dockerfile: docker/minio/Dockerfile
+    depends_on:
+    - minio
+    container_name: minio-setup
+    env_file:
+    - docker/.env
+    entrypoint: "/setup.sh"
